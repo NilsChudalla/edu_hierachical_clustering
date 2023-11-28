@@ -194,7 +194,7 @@ D_{max}(C_{i}, C_{j}) = \begin{matrix}max\\x\epsilon C_{i}, y\epsilon C_{j}\end{
     
 if selected_linkage == 'average':
     st.latex(r'''
-D_{average}(C_{i}, C_{j}) = \begin{matrix}max\\x\epsilon C_{i}, y\epsilon C_{j}\end{matrix}\left \| x-y \right \|^{2}
+D_{average}(C_{i}, C_{j}) = \left \| \mu_{i} - \mu_{j}  \right \|^{2}
                ''')
         
 
