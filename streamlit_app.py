@@ -86,7 +86,7 @@ def plot_dendrogram(model, p):
     dendrogram(linkage_matrix, truncate_mode="level", p=p, ax=ax2)#, color_threshold=np.max())
     ax2.set_ylabel("Distance between groups")
     ax2.set_xlabel("Number of points in node (or index of point if no parenthesis).")
-    ax2.axis('equal')
+    
     st.pyplot(fig2)
     
 def plot_agglo_distance(data,d, linkage):
@@ -125,6 +125,7 @@ st.markdown('''
             3. Compute distances between new groups.
             4. Repeat 2. until only one cluster is left. 
             ''')
+st.markdown('''Cluster "boundaries" are not flexible. Once formed clusters cannot be changed, other than being merged with another cluster. ''')
 # Add a dropdown to select the dataset
 st.subheader('Select dataset')
 selected_dataset = st.selectbox("Select a dataset", ['blobs', 'iris', 'moons'] )
@@ -201,7 +202,9 @@ model = AgglomerativeClustering(distance_threshold=0, linkage=selected_linkage, 
 model = model.fit(data[:,:2])
 
 st.subheader('Select maximum distance for cluster merging')
-
+st.markdown('''
+Colors in this plot are not fixed to a label. Upon changes in clusters, strongly shifting colors may occur due to a random colormap. Just focus on clusters of the same color.
+''')
 d = st.slider(
     label='Maximum distance',
     min_value=0.0,
@@ -217,7 +220,7 @@ p = st.slider(
         label="Set parameter 'p' to truncate dendrogram",
         value=3,
         min_value=1,
-        max_value=8,
+        max_value=10,
         step=1)
 plot_dendrogram(model, p)
 
