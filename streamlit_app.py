@@ -56,6 +56,7 @@ def plot_dataset(data, target, dataset_name):
     for i in np.unique(target):
         ax1.scatter([],[], color=cmap(norm(i)), label=str(i))
     ax1.legend(title='Target')
+    ax1.axis('equal')
     st.pyplot(fig1)
 
 def plot_dendrogram(model, p):
@@ -85,6 +86,7 @@ def plot_dendrogram(model, p):
     dendrogram(linkage_matrix, truncate_mode="level", p=p, ax=ax2)#, color_threshold=np.max())
     ax2.set_ylabel("Distance between groups")
     ax2.set_xlabel("Number of points in node (or index of point if no parenthesis).")
+    ax2.axis('equal')
     st.pyplot(fig2)
     
 def plot_agglo_distance(data,d, linkage):
@@ -98,6 +100,7 @@ def plot_agglo_distance(data,d, linkage):
     ax3.scatter(data[:,0], data[:,1], c=clusters, cmap=cc.cm.glasbey)
     ax3.set_xlabel('Feature 0')
     ax3.set_ylabel('Feature 1')
+    ax3.axis('equal')
     st.pyplot(fig3)
 
 
@@ -114,6 +117,8 @@ st.title("Agglomerative clustering")
 st.markdown('Use this webapp to perform agglomerative clustering on different classification toy datasets. We use Agglomerative clustering by sci-kit learn. The first interactive widget lets you to select a linkage type. The second widget allows you to control the maximum distance for the clustering algorithm. The resulting clusters are then plotted. The third widget lets you truncate the dendrogram (source: scikit-learn).')
 st.markdown('''
             The agglomerative clustering algorithm generally operates as follows:
+            ''')
+st.markdown('''
             0. Treat every unique object as a single group/cluster.
             1. Compute pair-wise distance between all groups.
             2. Merge TWO most similar clusters (depends on linkage)
@@ -122,7 +127,7 @@ st.markdown('''
             ''')
 # Add a dropdown to select the dataset
 st.subheader('Select dataset')
-selected_dataset = st.selectbox("Select a dataset", ['iris', 'blobs', 'moons'])
+selected_dataset = st.selectbox("Select a dataset", ['blobs', 'iris', 'moons'] )
 
 # Load the selected dataset
 data, target = load_toy_dataset(selected_dataset)
@@ -157,6 +162,20 @@ st.write(f"Number of classes: {len(set(target))}")
 st.write("Loaded dataset:")
 st.write(df)
 
+selection = np.arange(data.shape[0])
+np.random.shuffle(selection)
+
+sel = st.slider(
+    label='Reduce selection',
+    min_value=0,
+    max_value=data.shape[0]-1,
+    value=data.shape[0]-1,
+    step=1
+)
+
+data = data[:sel, :]
+target = target[:sel]
+
 plot_dataset(data, target, selected_dataset)
 
 st.subheader('Select linkage')
@@ -186,7 +205,7 @@ st.subheader('Select maximum distance for cluster merging')
 d = st.slider(
     label='Maximum distance',
     min_value=0.0,
-    max_value=np.max(model.distances_),
+    max_value=np.max(model.distances_)*1.01,
     value=np.max(model.distances_)*1.01,
     step=np.max(model.distances_/100)
 )
