@@ -1,2 +1,2 @@
 # edu_hierachical_clustering
- Streamlit app for hiearchical clustering for educational purposes
+ Streamlit app exploring hiearchical clustering for educational purposes
